@@ -15,7 +15,7 @@
 [![QQ Group](https://img.shields.io/badge/QQ%20Group-903244818-blue)](https://jq.qq.com/?_wv=1027&k=muSqhF9x)
 [![Discord](https://img.shields.io/discord/1239476909033656320?label=Discord)](https://discord.gg/dV9A6ZjVhC)
 
-[English](./README.md), [简体中文](./README.zh.md), [日本語](./README.ja.md)
+[English](./README.en.md), [简体中文](./README.zh.md), [日本語](./README.ja.md)
 
 GZ::CTF 是一个基于 ASP.NET Core 的开源 CTF 平台。
 
