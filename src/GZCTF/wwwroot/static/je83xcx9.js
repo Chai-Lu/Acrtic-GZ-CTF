@@ -1,0 +1,9 @@
+/* The GZ::CTF Project @unknown
+ * 
+ * License   : GNU Affero General Public License v3.0 (Core)
+ * License   : LicenseRef-GZCTF-Restricted (Restricted components)
+ * Commit    : Unofficial build version
+ * Build     : 2025-12-08T11:45:34.456Z
+ * Copyright (C) 2022-2025 GZTimeWalker. All Rights Reserved.
+ */
+import{Cr as e,O as t,Oa as n,Vn as r,W as i,Xn as a,ha as o,q as s,wr as c}from"./index.hrqptwjo.js";var l=n(t()),u=n(o());const d=async e=>{if(e instanceof a){if(e.response?.data instanceof Blob){let t=e.response.data;if(t.type===r.Text)return await t.text();if(t.type===r.Json){let e=window.JSON.parse(await t.text());if(e.title)return e.title}}return e.message}else return String(e)};var f=(e,t)=>{if(e.data instanceof Blob){let n=window.URL.createObjectURL(e.data),r=e.headers[`content-disposition`];!t&&r&&(t=(e=>{let t=e.match(/filename\*=UTF-8''([^;]+)/i);if(t)return decodeURIComponent(t[1]);let n=e.match(/filename="?([^";]+)"?/);if(n)return n[1]})(r));let i=document.createElement(`a`);i.style.display=`none`,i.href=n,t&&(i.download=t),document.body.appendChild(i),i.click(),window.setTimeout(()=>{i.remove(),window.URL.revokeObjectURL(n)})}else throw Error(`Response data is not a Blob`)};const p=async(t,n,r,a)=>{n(!0),e({color:`orange`,id:`blob-download`,message:r(`common.download.started`),loading:!0,autoClose:!1});try{let e=await t;c({id:`blob-download`,color:`teal`,message:r(`common.download.success`),icon:(0,u.jsx)(l.Icon,{path:i,size:1}),loading:!1,autoClose:!0}),f(e,a)}catch(e){c({id:`blob-download`,color:`red`,title:r(`common.download.failed`),message:await d(e),icon:(0,u.jsx)(l.Icon,{path:s,size:1}),autoClose:!1,withCloseButton:!0})}finally{n(!1)}};export{d as n,p as t};
