@@ -9,6 +9,7 @@ $Version = "v$InputVersion-arctic"
 
 $ReleaseDir = Join-Path $PSScriptRoot "release"
 $SourceDir = Join-Path $PSScriptRoot "..\src\GZCTF"
+$TempBuildDir = Join-Path $PSScriptRoot "temp_build"
 
 # Get Git Info
 try {
@@ -38,15 +39,40 @@ New-Item -Path $ReleaseDir -ItemType Directory | Out-Null
 New-Item -Path "$ReleaseDir\data" -ItemType Directory | Out-Null
 New-Item -Path "$ReleaseDir\data\files" -ItemType Directory | Out-Null
 New-Item -Path "$ReleaseDir\data\db" -ItemType Directory | Out-Null
-New-Item -Path "$ReleaseDir\app" -ItemType Directory | Out-Null
+
+# Clean and Create Temp Build Directory
+if (Test-Path $TempBuildDir) {
+    Remove-Item -Path $TempBuildDir -Recurse -Force
+}
+New-Item -Path $TempBuildDir -ItemType Directory | Out-Null
 
 # Publish Backend (triggers Frontend build)
-Write-Host "Building and Publishing..."
-# Publish to release/app/publish to match Dockerfile expectation
-dotnet publish "$SourceDir\GZCTF.csproj" -c Release -o "$ReleaseDir\app\publish" /p:VITE_APP_GIT_NAME=$Version /p:VITE_APP_GIT_SHA=$CommitHash /p:VITE_APP_BUILD_TIMESTAMP=$Timestamp
+Write-Host "Building and Publishing to temp directory..."
+dotnet publish "$SourceDir\GZCTF.csproj" -c Release -o "$TempBuildDir\publish" /p:VITE_APP_GIT_NAME=$Version /p:VITE_APP_GIT_SHA=$CommitHash /p:VITE_APP_BUILD_TIMESTAMP=$Timestamp
 
-# Copy Dockerfile to release/app
-Copy-Item "$SourceDir\Dockerfile" "$ReleaseDir\app\Dockerfile"
+# Copy Dockerfile to temp build dir
+Copy-Item "$SourceDir\Dockerfile" "$TempBuildDir\Dockerfile"
+
+# Build Docker Image
+Write-Host "Building Docker Image (gzctf:latest)..."
+try {
+    docker build -t gzctf:latest "$TempBuildDir"
+} catch {
+    Write-Error "Docker build failed. Please ensure Docker is running."
+    exit 1
+}
+
+# Remove Temp Build Directory
+Remove-Item -Path $TempBuildDir -Recurse -Force
+
+# Generate version.md
+$VersionContent = @"
+$Version #$ShortHash
+Built at $Timestamp
+
+Copyright © 2022-now @GZTimeWalker
+"@
+$VersionContent | Out-File "$ReleaseDir\version.md" -Encoding utf8
 
 # Generate appsettings.json
 $AppSettings = @{
@@ -77,7 +103,6 @@ $DockerCompose = @"
 services:
   gzctf:
     image: gzctf:latest
-    build: ./app
     restart: always
     ports:
       - "80:8080"
@@ -111,6 +136,8 @@ services:
 $DockerCompose | Out-File "$ReleaseDir\docker-compose.yml" -Encoding utf8
 
 Write-Host "Release generated in $ReleaseDir"
-Write-Host "To build the docker image and run:"
+Write-Host "Docker image 'gzctf:latest' has been built locally."
+Write-Host "To run the services:"
 Write-Host "  cd $ReleaseDir"
-Write-Host "  docker-compose up -d --build"
+Write-Host "  docker-compose up -d"
+

@@ -33,8 +33,9 @@
 该脚本执行以下操作：
 1.  **版本控制**：提示输入版本号（默认为 `1.7.2`，生成 `v1.7.2-arctic`），并自动获取 Git Commit Hash。
 2.  **编译发布**：构建后端和前端，并将版本信息注入到应用中。
-3.  **生成配置**：自动生成配套的 `docker-compose.yml` 和 `appsettings.json`。
-4.  **打包输出**：所有文件将输出到 `Further-TBD/release` 目录。
+3.  **镜像构建**：在本地构建 `gzctf:latest` Docker 镜像。
+4.  **生成配置**：自动生成配套的 `docker-compose.yml`、`appsettings.json` 以及包含版本信息的 `version.md`。
+5.  **打包输出**：所有文件将输出到 `Further-TBD/release` 目录。
 
 **用法：**
 ```powershell
@@ -46,7 +47,7 @@ cd Further-TBD
 生成后，进入 `release` 目录即可使用 Docker Compose 启动：
 ```powershell
 cd release
-docker-compose up -d --build
+docker-compose up -d
 ```
 
 ---

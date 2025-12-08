@@ -33,8 +33,9 @@ If you need to generate a standalone package for production deployment (includin
 This script performs the following actions:
 1.  **Versioning**: Prompts for a version number (default is `1.7.2`, resulting in `v1.7.2-arctic`) and automatically retrieves the Git Commit Hash.
 2.  **Build & Publish**: Builds both backend and frontend, injecting version information into the application.
-3.  **Configuration**: Automatically generates the matching `docker-compose.yml` and `appsettings.json`.
-4.  **Output**: All files are output to the `Further-TBD/release` directory.
+3.  **Image Build**: Builds the `gzctf:latest` Docker image locally.
+4.  **Configuration**: Automatically generates `docker-compose.yml`, `appsettings.json`, and `version.md` containing version details.
+5.  **Output**: All files are output to the `Further-TBD/release` directory.
 
 **Usage:**
 ```powershell
@@ -46,7 +47,7 @@ cd Further-TBD
 After generation, navigate to the `release` directory to start with Docker Compose:
 ```powershell
 cd release
-docker-compose up -d --build
+docker-compose up -d
 ```
 
 ---
