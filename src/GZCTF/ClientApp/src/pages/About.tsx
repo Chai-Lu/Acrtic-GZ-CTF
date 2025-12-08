@@ -190,7 +190,7 @@ const About: FC = () => {
           </Group>
           <Flex direction="column" align="center" gap="sm">
             <Badge size="lg" variant="dot" color={valid ? 'green' : 'red'} className={classes.versionBadge}>
-              {valid ? `${tag}${shortSha}` : 'UNOFFICIAL'}
+              {valid ? `${tag} ${shortSha}` : 'UNOFFICIAL'}
             </Badge>
             <Text size="xs" fw={400} c="gray" ta="center" ff="monospace">
               {valid ? `Built at ${buildTime.format('YYYY-MM-DDTHH:mm:ssZ')}` : 'This release is not officially built'}
