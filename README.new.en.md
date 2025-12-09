@@ -48,6 +48,15 @@ Located in `Further-TBD/`, three generation methods are provided:
     *   **Function**: Generates legacy deployment structure.
     *   **Usage**: `.\app.ps1`
 
+### Release Package Structure
+
+The generated `release` directory is a complete offline deployment package containing:
+*   `images/gzctf.tar`: Offline Docker image containing the full application and dependencies.
+*   `docker-compose.yml`: Service orchestration file.
+*   `appsettings.json`: Application configuration file.
+*   `version.md`: Version information.
+*   `data/`: Pre-created data mount directories.
+
 **General Usage:**
 ```powershell
 cd Further-TBD
@@ -55,9 +64,14 @@ cd Further-TBD
 # Enter the version number when prompted, or press Enter to use the default
 ```
 
-After generation, navigate to the `release` directory to start with Docker Compose:
+**Deployment:**
+
+Send the generated `release` directory to the deployment personnel and run the following on the target machine:
 ```powershell
 cd release
+# 1. Load offline image
+docker load -i images/gzctf.tar
+# 2. Start services
 docker-compose up -d
 ```
 

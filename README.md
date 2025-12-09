@@ -48,16 +48,30 @@
     *   **功能**：生成旧版部署结构。
     *   **用法**：`.\app.ps1`
 
-**通用用法：**
+### 发布包结构 (Release Package Structure)
+
+生成的 `release` 目录是一个完整的离线部署包，包含：
+*   `images/gzctf.tar`: 包含完整应用和依赖的离线 Docker 镜像。
+*   `docker-compose.yml`: 服务编排文件。
+*   `appsettings.json`: 应用配置文件。
+*   `version.md`: 版本信息。
+*   `data/`: 预创建的数据挂载目录。
+
+**通用用法 (General Usage)：**
 ```powershell
 cd Further-TBD
 .\generate_release_local.ps1 # 示例
 # 按提示输入版本号，或直接回车使用默认值
 ```
 
-生成后，进入 `release` 目录即可使用 Docker Compose 启动：
+**部署方法 (Deployment)：**
+
+将生成的 `release` 目录发送给部署人员，在目标机器上执行：
 ```powershell
 cd release
+# 1. 导入离线镜像
+docker load -i images/gzctf.tar
+# 2. 启动服务
 docker-compose up -d
 ```
 

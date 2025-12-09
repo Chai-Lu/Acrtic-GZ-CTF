@@ -95,6 +95,11 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# Export Docker Image
+Write-Host "Exporting Docker Image to tarball..."
+New-Item -Path "$ReleaseDir\images" -ItemType Directory | Out-Null
+docker save -o "$ReleaseDir\images\gzctf.tar" gzctf:latest
+
 # Remove Temp Build Directory
 Remove-Item -Path $TempBuildDir -Recurse -Force
 
@@ -169,8 +174,9 @@ services:
 $DockerCompose | Out-File "$ReleaseDir\docker-compose.yml" -Encoding utf8
 
 Write-Host "Release generated in $ReleaseDir"
-Write-Host "Docker image 'gzctf:latest' has been built locally."
+Write-Host "Docker image exported to 'images/gzctf.tar'."
 Write-Host "To run the services:"
 Write-Host "  cd $ReleaseDir"
+Write-Host "  docker load -i images/gzctf.tar"
 Write-Host "  docker-compose up -d"
 
