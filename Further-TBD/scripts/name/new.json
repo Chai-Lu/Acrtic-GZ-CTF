@@ -1,0 +1,11 @@
+﻿{
+    "LabelEn":  "GreenHand",
+    "Name":  "NewHand",
+    "Label":  "NEW",
+    "Icon":  "mdiNewBox",
+    "Key":  "new",
+    "Color":  "Orange",
+    "Translations":  {
+
+                     }
+}

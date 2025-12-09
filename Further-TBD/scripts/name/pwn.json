@@ -1,0 +1,7 @@
+﻿{
+    "Label":  "二进制漏洞利用",
+    "Icon":  "mdiBomb",
+    "Key":  "pwn",
+    "Name":  "Pwn",
+    "Color":  "red"
+}

@@ -1,0 +1,7 @@
+﻿{
+    "Label":  "逆向工程",
+    "Icon":  "mdiChevronTripleLeft",
+    "Key":  "reverse",
+    "Name":  "Reverse",
+    "Color":  "yellow"
+}
