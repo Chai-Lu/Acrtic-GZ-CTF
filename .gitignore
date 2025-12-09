@@ -262,3 +262,7 @@ _Pvt_Extensions
 
 # Local build dependencies
 Further-TBD/locallybuild/*.zip
+
+# Local saves (keep folder, ignore content)
+Further-TBD/saves/*
+!Further-TBD/saves/.gitkeep

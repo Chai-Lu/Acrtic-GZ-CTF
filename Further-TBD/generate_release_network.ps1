@@ -120,17 +120,11 @@ $AppSettings = @{
         "RedisCache" = "redis:6379,password=GZCTF_REDIS_PASSWORD"
         "Storage" = "disk://path=./files"
     }
+    "XorKey" = "GZCTF_XOR_KEY_PLACEHOLDER"
     "Logging" = @{
         "LogLevel" = @{
             "Default" = "Information"
             "Microsoft.AspNetCore" = "Warning"
-        }
-    }
-    "Kestrel" = @{
-        "Endpoints" = @{
-            "Http" = @{
-                "Url" = "http://*:8080"
-            }
         }
     }
 }

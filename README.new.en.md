@@ -76,15 +76,23 @@ docker-compose up -d
 
 You can test the generated Release package directly on your local machine without affecting the existing Git repository code.
 
+**Using Presets (Using Saves):**
+For quick local testing, the `Further-TBD/saves/` directory contains a set of preset configuration files (`appsettings.json` and `docker-compose.yml`) with passwords configured for local testing.
+*   This directory is ignored by Git (except for `.gitkeep`), so you can safely store your own test configurations here.
+*   **Usage**: After generating the Release, copy all files from the `saves` directory to the `release` directory, overwriting the existing ones.
+
+**Testing Steps:**
+
 1.  **Stop Dev Environment**: If `start_env.bat` or other services using port 8080 are running, stop them first.
-2.  **Start Release**:
+2.  **Apply Config**: Copy configuration files from `Further-TBD/saves/` to `Further-TBD/release/`.
+3.  **Start Release**:
     ```powershell
     cd Further-TBD/release
     # If generated via local mode and image exists locally, skip the load step
     docker-compose up -d
     ```
-3.  **Access**: Open `http://localhost:8080` in your browser.
-4.  **Cleanup**: After testing, stop and remove the containers:
+4.  **Access**: Open `http://localhost:8080` in your browser.
+5.  **Cleanup**: After testing, stop and remove the containers:
     ```powershell
     docker-compose down
     ```

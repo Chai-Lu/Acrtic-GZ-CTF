@@ -76,15 +76,23 @@ docker-compose up -d
 
 你可以在本机直接测试生成的 Release 包，这不会影响现有的 Git 仓库代码。
 
+**使用预设配置 (Using Saves):**
+为了方便本地快速测试，`Further-TBD/saves/` 目录中包含了一套预设的配置文件（`appsettings.json` 和 `docker-compose.yml`），其中已配置好本地测试专用的密码。
+*   该目录被 Git 忽略（除了 `.gitkeep`），你可以安全地将自己的测试配置保存在这里。
+*   **使用方法**：Release 生成后，将 `saves` 目录下的所有文件复制到 `release` 目录中覆盖即可。
+
+**测试步骤:**
+
 1.  **停止开发环境**：如果正在运行 `start_env.bat` 或其他占用 8080 端口的服务，请先停止它们。
-2.  **启动 Release**：
+2.  **应用配置**：将 `Further-TBD/saves/` 中的配置文件复制到 `Further-TBD/release/`。
+3.  **启动 Release**：
     ```powershell
     cd Further-TBD/release
     # 如果是 local 模式生成，且本地已有镜像，可跳过 load 步骤
     docker-compose up -d
     ```
-3.  **访问**：浏览器访问 `http://localhost:8080`。
-4.  **清理**：测试完成后，停止并移除容器：
+4.  **访问**：浏览器访问 `http://localhost:8080`。
+5.  **清理**：测试完成后，停止并移除容器：
     ```powershell
     docker-compose down
     ```
