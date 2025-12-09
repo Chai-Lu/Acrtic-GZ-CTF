@@ -50,15 +50,48 @@ New-Item -Path $TempBuildDir -ItemType Directory | Out-Null
 Write-Host "Building and Publishing to temp directory..."
 dotnet publish "$SourceDir\GZCTF.csproj" -c Release -o "$TempBuildDir\publish" /p:VITE_APP_GIT_NAME=$Version /p:VITE_APP_GIT_SHA=$CommitHash /p:VITE_APP_BUILD_TIMESTAMP=$Timestamp
 
-# Copy Dockerfile to temp build dir
-Copy-Item "$SourceDir\Dockerfile" "$TempBuildDir\Dockerfile"
+# Generate Dockerfile for local build (Dynamic Satori download inside Docker)
+$DockerfileContent = @"
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
+
+# Install dependencies
+RUN apk add --update --no-cache wget libpcap icu-data-full icu-libs \
+    ca-certificates libgdiplus tzdata krb5-libs unzip && \
+    update-ca-certificates
+
+# Download Satori (Dynamic based on arch, defaulting to amd64)
+ARG TARGETARCH
+RUN if [ -z "`$TARGETARCH" ]; then TARGETARCH=amd64; fi && \
+    echo "Building for architecture: `$TARGETARCH" && \
+    wget -O satori.zip "https://github.com/hez2010/Satori/releases/latest/download/linux_musl_`$TARGETARCH.zip" && \
+    unzip satori.zip -d satori && \
+    chmod +x satori/* && \
+    mv satori/* /usr/share/dotnet/shared/Microsoft.NETCore.App/`$(ls /usr/share/dotnet/shared/Microsoft.NETCore.App)/ && \
+    rm satori.zip && rm -rf satori
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8
+
+WORKDIR /app
+COPY --chown=`$APP_UID:`$APP_UID publish .
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=5m --timeout=3s --start-period=10s --retries=1 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/healthz || exit 1
+
+ENTRYPOINT ["dotnet", "GZCTF.dll"]
+"@
+$DockerfileContent | Out-File "$TempBuildDir\Dockerfile" -Encoding utf8
 
 # Build Docker Image
 Write-Host "Building Docker Image (gzctf:latest)..."
-try {
-    docker build -t gzctf:latest "$TempBuildDir"
-} catch {
-    Write-Error "Docker build failed. Please ensure Docker is running."
+docker build -t gzctf:latest "$TempBuildDir"
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Docker build failed. Please check your network connection to mcr.microsoft.com or configure a proxy."
+    if (Test-Path $TempBuildDir) {
+        Remove-Item -Path $TempBuildDir -Recurse -Force
+    }
     exit 1
 }
 

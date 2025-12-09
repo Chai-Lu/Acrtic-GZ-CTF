@@ -5,7 +5,7 @@
 
 This is a customized GZ::CTF platform environment.
 
-## 🚀 Quick Start
+##  Quick Start
 
 To start the development environment with one click, simply run the provided batch script:
 
@@ -24,23 +24,34 @@ Double-click `start_env.bat` or run it from the command line:
 
 ---
 
-## � Release Generation
+##  Release Generation
 
 If you need to generate a standalone package for production deployment (including Docker configuration), use the release generation script.
 
-### `Further-TBD/generate_release.ps1`
+### Release Scripts
 
-This script performs the following actions:
-1.  **Versioning**: Prompts for a version number (default is `1.7.2`, resulting in `v1.7.2-arctic`) and automatically retrieves the Git Commit Hash.
-2.  **Build & Publish**: Builds both backend and frontend, injecting version information into the application.
-3.  **Image Build**: Builds the `gzctf:latest` Docker image locally.
-4.  **Configuration**: Automatically generates `docker-compose.yml`, `appsettings.json`, and `version.md` containing version details.
-5.  **Output**: All files are output to the `Further-TBD/release` directory.
+Located in `Further-TBD/`, three generation methods are provided:
 
-**Usage:**
+1.  **`generate_release_network.ps1` (Recommended)**
+    *   **Scenario**: Good network environment, Docker container can access GitHub.
+    *   **Function**: Standard build process, automatically downloads `Satori` dependency during Docker build.
+    *   **Usage**: `.\generate_release_network.ps1`
+
+2.  **`generate_release_local.ps1` (Offline/Restricted Network)**
+    *   **Scenario**: Restricted network inside Docker container, unable to download dependencies.
+    *   **Function**: Uses locally pre-downloaded dependency files.
+    *   **Prerequisite**: Manually download `linux_musl_amd64.zip` (or `arm64`) and place it in `Further-TBD/locallybuild/`.
+    *   **Usage**: `.\generate_release_local.ps1`
+
+3.  **`app.ps1` (Legacy)**
+    *   **Scenario**: Requires legacy directory structure (`release/app`).
+    *   **Function**: Generates legacy deployment structure.
+    *   **Usage**: `.\app.ps1`
+
+**General Usage:**
 ```powershell
 cd Further-TBD
-.\generate_release.ps1
+.\generate_release_local.ps1 # Example
 # Enter the version number when prompted, or press Enter to use the default
 ```
 
@@ -52,7 +63,7 @@ docker-compose up -d
 
 ---
 
-## �🛡️ Backup & Recovery
+##  Backup & Recovery
 
 For detailed instructions on data persistence, please refer to [Further-TBD/RECOVERY.MD](Further-TBD/RECOVERY.MD).
 

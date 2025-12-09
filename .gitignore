@@ -259,3 +259,6 @@ _Pvt_Extensions
 
 # Node package lock files (npm)
 **/package-lock.json
+
+# Local build dependencies
+Further-TBD/locallybuild/*.zip
