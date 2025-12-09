@@ -7,20 +7,17 @@
 
 ##  快速开始 (Quick Start)
 
-要一键启动开发环境，只需运行提供的批处理脚本：
+提供了两个启动脚本，适用于不同的场景：
 
-### `start_env.bat`
+### 1. `start_env.bat` (推荐用于演示/预览)
+*   **核心逻辑**：先编译前端，再启动后端。
+*   **特点**：模拟生产环境（后端托管静态前端文件），启动后无需额外的前端服务。不支持前端热更新。
+*   **用法**：`.\start_env.bat`
 
-该脚本自动执行以下步骤：
-1.  **构建前端**：编译 `src/GZCTF/ClientApp` 中的 React 应用程序。
-2.  **部署资源**：将构建产物复制到后端的 `wwwroot` 目录。
-3.  **启动后端**：启动 .NET Aspire AppHost (`GZCTF.AppHost`)，它负责编排 GZ::CTF 服务器、PostgreSQL 数据库、Redis 缓存和 MinIO 存储。
-
-**用法：**
-双击 `start_env.bat` 或在命令行中运行：
-```powershell
-.\start_env.bat
-```
+### 2. `start_dev.bat` (推荐用于开发)
+*   **核心逻辑**：环境检查 + 证书配置 + 依赖安装 + 启动后端。
+*   **特点**：自动配置 HTTPS 开发证书，安装前端依赖。适合开发者首次配置环境或进行代码开发（配合 IDE 使用）。
+*   **用法**：`.\start_dev.bat`
 
 ---
 
@@ -74,6 +71,23 @@ docker load -i images/gzctf.tar
 # 2. 启动服务
 docker-compose up -d
 ```
+
+### 本地测试 (Local Testing)
+
+你可以在本机直接测试生成的 Release 包，这不会影响现有的 Git 仓库代码。
+
+1.  **停止开发环境**：如果正在运行 `start_env.bat` 或其他占用 8080 端口的服务，请先停止它们。
+2.  **启动 Release**：
+    ```powershell
+    cd Further-TBD/release
+    # 如果是 local 模式生成，且本地已有镜像，可跳过 load 步骤
+    docker-compose up -d
+    ```
+3.  **访问**：浏览器访问 `http://localhost:8080`。
+4.  **清理**：测试完成后，停止并移除容器：
+    ```powershell
+    docker-compose down
+    ```
 
 ---
 

@@ -7,20 +7,17 @@ This is a customized GZ::CTF platform environment.
 
 ##  Quick Start
 
-To start the development environment with one click, simply run the provided batch script:
+Two startup scripts are provided for different scenarios:
 
-### `start_env.bat`
+### 1. `start_env.bat` (Recommended for Demo/Preview)
+*   **Logic**: Builds frontend first, then starts backend.
+*   **Features**: Simulates production environment (backend hosts static frontend files). No extra frontend service required after start. Does not support frontend hot-reload.
+*   **Usage**: `.\start_env.bat`
 
-This script automates the following steps:
-1.  **Builds the Frontend**: Compiles the React application in `src/GZCTF/ClientApp`.
-2.  **Deploys Assets**: Copies the build artifacts to the backend's `wwwroot` directory.
-3.  **Starts the Backend**: Launches the .NET Aspire AppHost (`GZCTF.AppHost`), which orchestrates the GZ::CTF server, PostgreSQL database, Redis cache, and MinIO storage.
-
-**Usage:**
-Double-click `start_env.bat` or run it from the command line:
-```powershell
-.\start_env.bat
-```
+### 2. `start_dev.bat` (Recommended for Development)
+*   **Logic**: Environment check + Certificate setup + Dependency install + Start backend.
+*   **Features**: Automatically configures HTTPS dev certificates and installs frontend dependencies. Suitable for first-time setup or active development (used with IDE).
+*   **Usage**: `.\start_dev.bat`
 
 ---
 
@@ -74,6 +71,23 @@ docker load -i images/gzctf.tar
 # 2. Start services
 docker-compose up -d
 ```
+
+### Local Testing
+
+You can test the generated Release package directly on your local machine without affecting the existing Git repository code.
+
+1.  **Stop Dev Environment**: If `start_env.bat` or other services using port 8080 are running, stop them first.
+2.  **Start Release**:
+    ```powershell
+    cd Further-TBD/release
+    # If generated via local mode and image exists locally, skip the load step
+    docker-compose up -d
+    ```
+3.  **Access**: Open `http://localhost:8080` in your browser.
+4.  **Cleanup**: After testing, stop and remove the containers:
+    ```powershell
+    docker-compose down
+    ```
 
 ---
 
